@@ -1,0 +1,10 @@
+f[i][j][k]前i个高度j第j层j-k个
+g[i][j]前i个 高度j概率
+f[i+1][j][k] += f[i][j][k]*(i-f[i][j][j]-f[i][j][k-1])+(f[i][j][k]+1)*f[i][j][k-1]/i
+f[i+1][j+1][k] += f[i][j][k]*f[i][j][j]/i
+
+f[i+1][j+1][j+1] f[i][j][j]/i
+g[i+1][j] += g[i][j]*(i-f[i][j][j])/i
+g[i+1][j+1]+=g[i][j]*f[i][j][j]/i
+
+f[i][j][0] g[i][0]=1;

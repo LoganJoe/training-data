@@ -1,0 +1,4 @@
+pa[i] =>(k+1)p   (k+1)pa[j] =>pa[i]<=kpa[j];up.
+down(k+1)p---->(k+1)(1-c)p = (k-kc+1-c)p;
+decrease down->k-c-kc<0(p -> 0.xp
+decrease up -> k-c-kc>0 ->1.xp

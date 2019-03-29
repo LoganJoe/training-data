@@ -1,0 +1,125 @@
+\documentclass{article}
+
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{fontspec}
+\usepackage{multirow}
+\usepackage[colorlinks,linkcolor=black]{hyperref}
+
+%\setmainfont[BoldFont=Source Sans Pro]{Source Sans Pro}
+%\setmonofont{Consolas}
+%\setCJKmainfont[BoldFont=Microsoft YaHei Semibold]{Microsoft YaHei Semilight}
+
+\addtolength{\hoffset}{-1.2cm}
+\addtolength{\marginparwidth}{-1.2cm}
+\addtolength{\textwidth}{2.4cm}
+
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2.0cm}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0.1pt}
+\lhead{by superguymj}
+\rhead{constitution}
+\cfoot{\thepage /\pageref{LastPage}}
+
+\title{董先生的休闲}
+\author{superguymj}
+\date{March 2018}
+
+\begin{document}
+
+\section*{董先生的休闲方案(constitution.c/cpp/pas)}
+
+%\fancyhead[R]{constitution}
+
+\subsection*{题目描述}
+
+桌上摆着$n$份董先生的休闲方案。
+现在董先生需要将这些休闲方案按高明程度\textbf{从小到大}依序提出。
+
+所有方案的高明程度是一个$1 \dots n$的排列，但是高明程度都写在方案的第二页，董先生一开始并不知道每一份方案的高明程度，因此他要进行评估（也就是翻到第二页查看高明程度）。
+
+每一秒，若董先生已经知道下一份要提出的休闲方案是哪一份了，便会将其提出；否则董先生会在\textbf{仍未进行评估}的休闲方案中\textbf{等概率}地取出一份进行评估，若恰好是下一份要提出的休闲方案，董先生便会将其直接提出，否则董先生会将其放回桌上（注意这些操作都在一秒内完成）。
+
+但是董先生急着去打游戏，所以他将这个任务交给了你，并希望你能告诉他耗时的\textbf{数学期望}。
+
+\subsection*{输入格式(constitution.in)}
+
+一行三个正整数$p,k,n$，$p,k$的意义见输出格式。
+
+\subsection*{输出格式(constitution.out)}
+
+一行一个整数，表示在\textbf{模$p^k$意义下}的期望耗时。\textbf{数据保证有解}，详见数据范围。
+
+\subsection*{样例一输入}
+
+2333 1 3
+
+\subsection*{样例一输出}
+
+393
+
+\subsection*{样例二输入}
+
+3 2 7
+
+\subsection*{样例二输出}
+
+8
+
+\subsection*{样例三输入}
+
+3 2 8
+
+\subsection*{样例三输出}
+
+2
+
+\subsection*{样例四输入}
+
+7 6 719102
+
+\subsection*{样例四输出}
+
+8533
+
+\subsection*{样例解释}
+
+共有1--2--3、1--3--2--3、2--1--2--3、3--1--2--3、2--3--1--2--3、3--2--1--2--3六种可能的顺序，期望耗时$\frac{25}{6} \equiv 393 \pmod{2333}$。
+
+其中$x$代表高明程度为$x$的方案，若$x$出现了两次，则第一次表示评估了$x$，第二次表示提交了$x$。
+
+\subsection*{数据范围与提示}
+
+记期望耗时为$\frac{u}{v}$，其中$u,v$互素。
+
+若存在整数$v^{-1}$，满足$vv^{-1} \equiv 1 \pmod{p^k}$，则模$p^k$意义下的答案即为$uv^{-1} \bmod p^k$。
+
+对于100\%的数据，保证存在整数$v^{-1}$，$p$为奇素数，且$p \leq 10^5$，$np^k \leq 10^{18}$。
+
+下表给出了部分数据点的详细数据范围。
+\begin{center}
+    \begin{tabular}{|c|c|c|c|} \hline
+        数据点编号 & $n \leq$ & $np^k \leq$ & 特殊性质 \\ \hline
+        1 & $10$ & \multirow{6}{*}{$10^{12}$} & \multirow{4}{*}{$n<p$且$k=1$} \\ \cline{1-2}
+        2 & $15$ & & \\ \cline{1-2}
+        3 & $2000$ & & \\ \cline{1-2}
+        4 & $10^5$ & & \\ \cline{1-2} \cline{4-4}
+        5 & $1000$ & & $k=2$ \\ \cline{1-2} \cline{4-4}
+        6 & $2 \times 10^5$ & & \multirow{5}{*}{无} \\ \cline{1-3}
+        7 & \multicolumn{2}{|c|}{\multirow{4}{*}{无}} & \\ \cline{1-1}
+        8 & \multicolumn{2}{|c|}{} & \\ \cline{1-1}
+        9 & \multicolumn{2}{|c|}{} & \\ \cline{1-1}
+        10 & \multicolumn{2}{|c|}{} & \\ \hline
+    \end{tabular}
+\end{center}
+
+\end{document}

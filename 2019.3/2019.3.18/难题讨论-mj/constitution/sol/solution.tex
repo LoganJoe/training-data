@@ -1,0 +1,185 @@
+\documentclass{article}
+
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+%\usepackage{graphicx}
+%\usepackage{color}
+%\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+%\usepackage{fontspec}
+%\usepackage{multirow}
+%\usepackage[colorlinks,linkcolor=black]{hyperref}
+
+%\setmainfont[BoldFont=Source Sans Pro]{Source Sans Pro}
+%\setmonofont{Consolas}
+%\setCJKmainfont[BoldFont=Microsoft YaHei Semibold]{Microsoft YaHei Semilight}
+
+\addtolength{\hoffset}{-1.2cm}
+\addtolength{\marginparwidth}{-1.2cm}
+\addtolength{\textwidth}{2.4cm}
+
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2.0cm}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0.1pt}
+\lhead{by superguymj}
+\chead{solution}
+\rhead{constitution}
+\cfoot{\thepage /\pageref{LastPage}}
+
+\title{董先生的休闲}
+\author{superguymj}
+\date{March 2018}
+
+\begin{document}
+
+\section*{董先生的休闲方案}
+
+\subsection*{解法一}
+
+每个方案只会评估一次，显然评估顺序与$1 \dots n$的排列一一对应。
+
+$x$只算一次当且仅当排列中比$x$小的数都在$x$的前面。
+
+枚举排列即可做到$\mathcal{O}(n!n)$的时间复杂度。
+
+期望得分10\%。
+
+\subsection*{解法二}
+
+显然可以状态压缩。
+
+$f_{i,S}$表示已经提出了前$i$个方案，目前已知方案为$S$，仍需耗时的期望。
+
+转移显然。
+
+时间复杂度$\mathcal{O}(n2^n)$。
+
+期望得分20\%。
+
+%\subsection*{解法二（20\%）}
+
+%$\mathcal{O}(n^3)$。
+%做法：
+%首先，我们发现这题可以不管每次具体选了什么数，只看已经拿到几个数和进行了几次操作，这样就可以搞一个概率dp，f[i][j]表示现在已经翻了i次，数到了第j个数，进行转移。
+%然而这里有个问题，就是当前回合翻出来的数，这种转移可能是会把它看成答案的。举个例子：
+%f[0][0] 翻到2 -> f[1][0]
+%f[1][0] 误认为之前翻过1 -> f[1][1]
+%因此，我们必须多开一维k表示当前回合翻过多少个错的数，当前回合选过的数不能再选，然后在转移到下一回合的时候再加进i中。
+
+\subsection*{解法三}
+
+因为期望是线性函数，每个方案对答案的贡献是独立的。
+
+考虑计算有多少个排列，满足排列中比$x$小的数都在$x$的前面。
+
+枚举$x$前比$x$大的数的个数，容易得到
+\[
+f(x) = \sum_{i=0}^{n-x} \binom{n-x}{i} (x-1+i)! (n-x-i)!
+\]
+
+答案即为
+\[
+2n - \sum_{i=1}^n \frac{f(i)}{n!}
+\]
+
+时间复杂度$\mathcal{O}(n^2)$。
+
+期望得分30\%。
+
+\subsection*{解法四}
+
+化简$f(x)$，容易得到
+\begin{eqnarray*}
+f(x)
+& = & \sum_{i=0}^{n-x} \frac{(n-x)! (x-1+i)! (n-x-i)!}{i! (n-x-i)!}  \\
+& = & (n-x)! (x-1)! \sum_{i=0}^{n-x} \frac{(x-1+i)!}{i!(x-1)!} \\
+& = & (n-x)! (x-1)! \sum_{i=0}^{n-x} \binom{x-1+i}{i} \\
+& = & (n-x)! (x-1)! \binom{n}{n-x} \\
+& = & \frac{(n-x)! (x-1)! n!}{x! (n-x)!} \\
+& = & \frac{n!}{x}
+\end{eqnarray*}
+
+化简和式使用了平行求和公式。
+
+形象地理解，比$x$大的数都确定后，$x$的位置就已经确定了，所以有$\frac{n!}{x}$种排列。
+
+答案即为
+\[
+2n-\sum_{i=1}^n \frac{1}{i}
+\]
+
+时间复杂度$\mathcal{O}(n)$。
+
+期望得分40\%。
+
+\subsection*{解法五}
+
+考虑优化解法二的状态。
+
+$f_i$表示剩余$i$份方案未评估的期望耗时，显然有
+\[
+f_i
+= \frac{1}{i}(f_{i-1}+1)+(1-\frac{1}{i})(f_{i-1}+2)
+= f_{i-1}+2-\frac{1}{i}
+\]
+
+答案即为
+\[
+f_n=2n-\sum_{i=1}^n \frac{1}{i}
+\]
+
+时间复杂度$\mathcal{O}(n)$。
+
+期望得分40\%。
+
+\subsection*{解法六}
+ 
+设\[F(n,p,k) \equiv \sum_{i=1}^n \frac{1}{i} \pmod{p^k}\]
+
+\begin{eqnarray*}
+F(n,p,k)
+& \equiv & \sum_{i=1}^n \frac{[p \nmid i]}{i} + \sum_{i=1}^{\lfloor \frac{n}{p} \rfloor} \frac{1}{ip} \pmod{p^k}\\
+& \equiv & \left( \sum_{i=1}^n \frac{[p \nmid i]}{i} \right) + \frac{F(\lfloor \frac{n}{p} \rfloor ,p,k+1)}{p} \pmod{p^k}
+\end{eqnarray*}
+
+时间复杂度$\mathcal{O}(n \log_p n)$。
+
+期望得分60\%。
+
+\subsection*{解法七}
+
+设\[f(n,p,k) \equiv \sum_{i=1}^n \frac{[p \nmid i]}{i} \pmod{p^k}\]
+
+则\[f(n,p,k) \equiv \sum_{i=1}^{p-1} \sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} \frac{1}{jp+i} + \sum_{i=\lfloor \frac{n}{p} \rfloor p+1}^n \frac{1}{i} \pmod{p^k}\]
+
+其中$\sum_{i=\lfloor \frac{n}{p} \rfloor p+1}^n \frac{1}{i}$可以$\mathcal{O}(p)$求得。
+
+将$\sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} \frac{1}{jp+i}$展开有
+\[
+\sum_{i=1}^{p-1} \sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} \frac{1}{jp+i}
+\equiv \sum_{i=1}^{p-1} \sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} \sum_{x=0}^{\infty} \frac{(-1)^x j^x p^x}{i^{x+1}} \pmod{p^k}
+\]
+
+当$x \geq k$时，$p^x \equiv 0 \pmod{p^k}$，因此
+\[
+\sum_{i=1}^{p-1} \sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} \sum_{x=0}^{k-1} \frac{(-1)^x j^x p^x}{i^{x+1}}
+\equiv
+\sum_{x=0}^{k-1} \sum_{i=1}^{p-1} \frac{(-1)^x p^x}{i^{x+1}} \sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} j^x \pmod{p^k}
+\]
+
+其中$\sum_{j=0}^{\lfloor \frac{n}{p} \rfloor -1} j^x$可以用伯努利数$\mathcal{O}(k^2)$或矩阵乘法快速幂$\mathcal{O}(k^3 \log n)$预处理，因而上式可以$\mathcal{O}(pk)$求得。
+
+总时间复杂度$\mathcal{O}((pk + k^2) \log_p n)$或$\mathcal{O}((pk+k^3 \log n) \log_p n)$。
+
+期望得分100\%。
+
+\subsection*{数据}
+
+因为有解的点非常少，所以$p,k,n$都不会非常满，拿了四台电脑跑了一个星期终于把最后四组数据造了出来。
+
+\end{document}
