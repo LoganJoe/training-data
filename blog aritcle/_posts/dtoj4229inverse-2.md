@@ -1,0 +1,13 @@
+---
+title: " DTOJ4229Inverse\t\t"
+tags:
+  - dp
+  - 奇技淫巧
+url: 7031.html
+id: 7031
+categories:
+  - Solution
+date: 2019-03-17 16:22:28
+---
+
+妈的原本推导过程都写完了然后电脑重启全灭了 设$f(i,j,k)$表示第$k$次操作后，$p\_i \\le p\_j$的概率。转移直接枚举第$k$次的操作区间。考虑进一步优化。 下面状态仅考虑当前次转移，即略去状态中的轮数$k$。 假设当前$i<j$，那么将当前区间$\[l:r\]$分成四类： - $r < i​$ or $l > j​$ or $i < l ≤ r < j​$，翻转这些区间不会对$i,j​$位置造成影响。 - $l ≤ i ≤ r < j$，只会改变$i$的位置，即从$f(l + r−i,j)$转移而来。 - $ i < l ≤ j ≤ r$，只会改变$j$的位置，即从$f(i,l + r−j)$转移而来。 - $ l ≤ i < j ≤ r$，会改变$i,j$的位置，但两者距离不变，即从$f(l + r−i,l + r− j)$转移而来。 我们考虑每次转移需要计算的东西。 对于第二种区间：我们要计算 $$ \\begin{aligned} f'(i,j) =& \\sum _ { l = 1 } ^ { i } \\sum _ { r = i } ^ { j - 1 } f ( l + r - i , j ) \\\ = & \\sum _ { l = 1 } ^ { i } \\sum _ { r = 0 } ^ { j - i - 1 } f ( l + r , j ) \\end{aligned} $$ 设 $$ \\begin{aligned} S _ { 1 } ( n , j ) = \\sum _ { i = 1 } ^ { n } f ( i , j )\\\ S _ { 2 } ( n , j ) = \\sum _ { i = 1 } ^ { n } S _ { 1 } ( i , j ) \\end{aligned} $$ 那么 $$ \\begin{aligned} & \\sum _ { l = 1 } ^ { i } \\sum _ { r = 0 } ^ { j - i - 1 } f ( l + r , j ) \\\ = & \\sum _ { l = 1 } ^ { i } S _ { 1 } ( l + j - i - 1 , j ) - S _ { 1 } ( l - 1 , j ) \\\ = & S _ { 2 } ( j - 1 , j ) - S _ { 2 } ( j - i - 1 , j ) - S _ { 2 } ( i - 1 , j ) \\end{aligned} $$ 那么 $$ f'(i,j)=S _ { 2 } ( j - 1 , j ) - S _ { 2 } ( j - i - 1 , j ) - S _ { 2 } ( i - 1 , j ) $$ 对于第三种区间，我们要计算 $$ \\begin{aligned} f'(i,j) =& \\sum _ { l = 1 } ^ { i } \\sum _ { r = i } ^ { j - 1 } f (i, l + r - i) \\\ = & \\sum _ { l = 1 } ^ { i } \\sum _ { r = 0 } ^ { j - i - 1 } f (i,l+r) \\end{aligned} $$ 同样地，我们另设 $$ \\begin{aligned} S _ { 1 } ( j , n ) = \\sum _ { i = 1 } ^ { n } f ( j , i )\\\ S _ { 2 } ( j , n ) = \\sum _ { i = 1 } ^ { n } S _ { 1 } ( j , i ) \\end{aligned} $$ 那么 $$ \\begin{aligned} & \\sum _ { l = 1 } ^ { i } \\sum _ { r = 0 } ^ { j - i - 1 } f (i, l + r ) \\\ = & \\sum _ { l = i+1 } ^ { j } S _ { 1 } ( i,l+n-j ) - S _ { 1 } ( i,l-1 ) \\\ = & S _ { 2 } (i, i+1 ) - S _ { 2 } ( i,j+1 ) - S _ { 2 } ( i,n+2-j+i ) \\end{aligned} $$ 至于第四种，我们先记 $$ \\begin{aligned} g(i+j)=f(i+j,j)\\\ S\_1(j,n)=\\sum\_{i=1}^{n}g(s,i)\\\ S\_2(j,n)=\\sum\_{i=1}^{n}S\_1(j,i) \\end{aligned} $$ 那么 $$ \\begin{aligned} f(i,j)&=\\sum\_{l=1}^{i}\\sum_{r=j}^{n}f(l+r-i,l+r-j)\\\ &=\\sum_{l=1}^{i}\\sum_{r=j}^{n}g(j-i,l+r-j)\\\ &=\\sum_{l=1}^{i} S_{1}(j-i, l+n-j, k-1)-S_{1}(j-i, l+j-1-j, k-1)\\\ &=i \\times (n + 1 - j) - S\_2(n + i - j,j - i) + S\_2(n - j,j - i) + S_2(i - 1,j - i) \\end{aligned} $$ 效率总的是$O(n^2 k)$。
